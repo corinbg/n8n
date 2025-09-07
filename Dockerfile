@@ -5,7 +5,7 @@ WORKDIR /app
 COPY . .
 
 # Installa pnpm senza usare corepack
-RUN npm install -g pnpm@8.15.6
+RUN npm install -g pnpm@10.2.1
 
 # Installa le dipendenze
 RUN pnpm install
@@ -22,6 +22,6 @@ WORKDIR /app
 COPY --from=builder /app .
 
 # Installa pnpm anche qui
-RUN npm install -g pnpm@8.15.6
+RUN npm install -g pnpm@10.2.1
 
 CMD ["pnpm", "start"]
