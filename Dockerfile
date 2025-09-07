@@ -1,35 +1,26 @@
-# Usa Node 20 stabile (viene gestito bene da n8n)
-FROM node:20 as builder
+# Usa Node 22 (necessario per n8n >= 1.110.0)
+FROM node:22.2.0 as builder
 
-# Crea directory di lavoro
 WORKDIR /app
-
-# Copia tutto il codice
 COPY . .
 
-# Abilita corepack e installa direttamente pnpm (senza firme)
+# Abilita Corepack per usare pnpm
 RUN corepack enable
-
 
 # Installa le dipendenze
 RUN pnpm install --frozen-lockfile
 
-# 🔨 Compila solo i pacchetti modificati
+# Compila solo i pacchetti modificati
 RUN pnpm --filter @n8n/n8n-nodes-langchain build && \
     pnpm --filter n8n-workflow build && \
     pnpm --filter n8n-core build && \
     pnpm --filter n8n-cli build
 
-# Secondo stage: immagine finale
-FROM node:20
-
+# Immagine finale, anche qui con Node 22
+FROM node:22.2.0
 WORKDIR /app
-
-# Copia i file compilati
 COPY --from=builder /app .
 
-# Abilita corepack e installa pnpm anche nel runtime (per sicurezza)
-RUN corepack enable && npm install -g pnpm@10.12.1
+RUN corepack enable
 
-# Avvia n8n
 CMD ["pnpm", "start"]
