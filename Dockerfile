@@ -4,8 +4,8 @@ FROM node:22.2.0 as builder
 WORKDIR /app
 COPY . .
 
-# Abilita Corepack per usare pnpm
-RUN corepack enable
+# Installa pnpm senza usare corepack
+RUN npm install -g pnpm@8.15.6
 
 # Installa le dipendenze
 RUN pnpm install
@@ -21,6 +21,7 @@ FROM node:22.2.0
 WORKDIR /app
 COPY --from=builder /app .
 
-RUN corepack enable
+# Installa pnpm anche qui
+RUN npm install -g pnpm@8.15.6
 
 CMD ["pnpm", "start"]
