@@ -1,5 +1,5 @@
 # Usa Node 22 (necessario per n8n >= 1.110.0)
-FROM node:22.2.0 as builder
+FROM node:22.16.0 as builder
 
 WORKDIR /app
 COPY . .
@@ -17,7 +17,7 @@ RUN pnpm --filter @n8n/n8n-nodes-langchain build && \
     pnpm --filter n8n-cli build
 
 # Immagine finale, anche qui con Node 22
-FROM node:22.2.0
+FROM node:22.16.0
 WORKDIR /app
 COPY --from=builder /app .
 
