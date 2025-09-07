@@ -8,7 +8,8 @@ WORKDIR /app
 COPY . .
 
 # Abilita corepack e installa direttamente pnpm (senza firme)
-RUN corepack enable && npm install -g pnpm@10.12.1
+RUN corepack enable
+
 
 # Installa le dipendenze
 RUN pnpm install --frozen-lockfile
