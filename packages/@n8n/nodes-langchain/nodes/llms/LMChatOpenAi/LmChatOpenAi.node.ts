@@ -375,7 +375,7 @@ export class LmChatOpenAi implements INodeType {
 			timeout: options.timeout ?? 60000,
 			maxRetries: options.maxRetries ?? 2,
 			configuration,
-			callbacks: [new N8nLlmTracing(this)],
+			callbacks: [],
 			modelKwargs,
 			onFailedAttempt: makeN8nLlmFailedAttemptHandler(this, openAiFailedAttemptHandler),
 		});
@@ -385,3 +385,4 @@ export class LmChatOpenAi implements INodeType {
 		};
 	}
 }
+patch: removed N8nLlmTracing
