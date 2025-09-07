@@ -5,10 +5,10 @@ WORKDIR /app
 COPY . .
 
 # Abilita pnpm
-RUN corepack enable && corepack prepare pnpm@10.4.0 --activate
+RUN corepack enable && corepack prepare pnpm@10.12.1 --activate
 
 # Installa dipendenze
-RUN pnpm install --frozen-lockfile
+RUN pnpm install
 
 # 🔨 Compila solo i pacchetti modificati
 RUN pnpm --filter @n8n/n8n-nodes-langchain build && \
@@ -17,7 +17,7 @@ RUN pnpm --filter @n8n/n8n-nodes-langchain build && \
     pnpm --filter n8n-cli build
 
 # ✅ FASE 2: immagine finale
-FROM node:18
+FROM node:22.16
 
 # Copia tutto da builder
 WORKDIR /app
