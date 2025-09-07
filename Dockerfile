@@ -5,7 +5,7 @@ WORKDIR /app
 COPY . .
 
 # Abilita pnpm
-RUN corepack enable && corepack prepare pnpm@8.15.4 --activate
+RUN corepack enable && corepack prepare pnpm@10.4.0 --activate
 
 # Installa dipendenze
 RUN pnpm install --frozen-lockfile
