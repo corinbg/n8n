@@ -8,6 +8,7 @@ COPY . .
 RUN npm install -g pnpm@10.2.1
 
 # Installa le dipendenze
+RUN pnpm update
 RUN pnpm install
 
 # Compila solo i pacchetti modificati
