@@ -4,8 +4,10 @@ WORKDIR /app
 
 COPY . .
 
-# Abilita corepack e pnpm 10.12.1 (coerente col lockfile)
-RUN corepack enable && corepack prepare pnpm@10.12.1 --activate
+# Abilita corepack e installa pnpm 10.12.1 manualmente (evita bug)
+RUN corepack enable
+RUN npm install -g pnpm@10.12.1
+
 
 # Installa dipendenze
 RUN pnpm install --frozen-lockfile
