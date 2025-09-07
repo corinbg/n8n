@@ -8,7 +8,7 @@ COPY . .
 RUN corepack enable
 
 # Installa le dipendenze
-RUN pnpm install --frozen-lockfile
+RUN pnpm install
 
 # Compila solo i pacchetti modificati
 RUN pnpm --filter @n8n/n8n-nodes-langchain build && \
