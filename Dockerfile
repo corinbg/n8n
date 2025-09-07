@@ -1,23 +1,34 @@
-FROM node:20.16
+# Usa Node 20 stabile (viene gestito bene da n8n)
+FROM node:20 as builder
+
+# Crea directory di lavoro
+WORKDIR /app
+
+# Copia tutto il codice
+COPY . .
+
+# Abilita corepack e installa direttamente pnpm (senza firme)
+RUN corepack enable && npm install -g pnpm@10.12.1
+
+# Installa le dipendenze
+RUN pnpm install --frozen-lockfile
+
+# 🔨 Compila solo i pacchetti modificati
+RUN pnpm --filter @n8n/n8n-nodes-langchain build && \
+    pnpm --filter n8n-workflow build && \
+    pnpm --filter n8n-core build && \
+    pnpm --filter n8n-cli build
+
+# Secondo stage: immagine finale
+FROM node:20
 
 WORKDIR /app
 
-COPY . .
+# Copia i file compilati
+COPY --from=builder /app .
 
-# Abilita corepack e installa pnpm 10.12.1 manualmente (evita bug)
-RUN corepack enable
-RUN npm install -g pnpm@10.12.1
+# Abilita corepack e installa pnpm anche nel runtime (per sicurezza)
+RUN corepack enable && npm install -g pnpm@10.12.1
 
-
-# Installa dipendenze
-RUN pnpm install --frozen-lockfile
-
-# 🔧 Fixa l'errore di rollup aggiungendo manualmente i moduli opzionali
-RUN pnpm add -w \
-  @rollup/rollup-linux-x64-gnu \
-  @rollup/rollup-linux-x64-musl \
-  @rollup/rollup-linux-arm64-gnu \
-  @rollup/rollup-linux-arm64-musl
-
-# Compila tutto il progetto
-RUN pnpm build
+# Avvia n8n
+CMD ["pnpm", "start"]
